@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace nothinbutdotnetprep.collections
 {
@@ -19,67 +20,123 @@ namespace nothinbutdotnetprep.collections
 
         public void add(Movie movie)
         {
-            throw new NotImplementedException();
+            if (!movies.Contains(movie))
+            {
+                   movies.Add(movie);
+            }
+
+
+         
+        }
+    
+
+        public IEnumerable<Movie> sort_all_movies_by_title_descending()
+        {
+            var list = new List<Movie>(movies);
+            list.Sort((movie1, movie2) => movie2.title.CompareTo(movie1.title));
+            return list;
         }
 
-        public IEnumerable<Movie> sort_all_movies_by_title_descending
-        {
-            get { throw new NotImplementedException(); }
-        }
 
         public IEnumerable<Movie> all_movies_published_by_pixar()
         {
-            throw new NotImplementedException();
+            var list = new List<Movie>(movies);
+
+            return list.FindAll(movie => (movie.production_studio.Equals(ProductionStudio.Pixar)));
+
         }
 
         public IEnumerable<Movie> all_movies_published_by_pixar_or_disney()
         {
-            throw new NotImplementedException();
+            var list = new List<Movie>(movies);
+
+            return list.FindAll(movie => (movie.production_studio.Equals(ProductionStudio.Pixar) || movie.production_studio.Equals(ProductionStudio.Disney)));
         }
 
-        public IEnumerable<Movie> sort_all_movies_by_title_ascending
+        public IEnumerable<Movie> sort_all_movies_by_title_ascending()
         {
-            get { throw new NotImplementedException(); }
+            var list = new List<Movie>(movies);
+            list.Sort((movie1, movie2) => movie1.title.CompareTo(movie2.title));
+            return list;
         }
 
         public IEnumerable<Movie> sort_all_movies_by_movie_studio_and_year_published()
         {
-            throw new NotImplementedException();
+            var list = new List<Movie>(movies);
+            list.Sort(new MovieStudioYearComparitor());
+            return list;
         }
+
+
 
         public IEnumerable<Movie> all_movies_not_published_by_pixar()
         {
-            throw new NotImplementedException();
+            var list = new List<Movie>(movies);
+
+            return list.FindAll( movie => (!movie.production_studio.Equals(ProductionStudio.Pixar) ));
         }
 
         public IEnumerable<Movie> all_movies_published_after(int year)
         {
-            throw new NotImplementedException();
+            var list = new List<Movie>(movies);
+
+            return list.FindAll(movie => (movie.date_published.Year > year));
         }
 
         public IEnumerable<Movie> all_movies_published_between_years(int startingYear, int endingYear)
         {
-            throw new NotImplementedException();
+            var list = new List<Movie>(movies);
+
+            return list.FindAll(movie => (movie.date_published.Year >= startingYear && movie.date_published.Year <= endingYear));
         }
 
         public IEnumerable<Movie> all_kid_movies()
         {
-            throw new NotImplementedException();
+            var list = new List<Movie>(movies);
+
+            return list.FindAll(movie => (movie.genre.Equals(Genre.kids)));
         }
 
         public IEnumerable<Movie> all_action_movies()
         {
-            throw new NotImplementedException();
+            var list = new List<Movie>(movies);
+
+            return list.FindAll(movie => (movie.genre.Equals(Genre.action)));
+
         }
 
         public IEnumerable<Movie> sort_all_movies_by_date_published_descending()
         {
-            throw new NotImplementedException();
+            var list = new List<Movie>(movies);
+            list.Sort((movie1, movie2) => movie2.date_published.CompareTo(movie1.date_published));
+            return list;
         }
 
         public IEnumerable<Movie> sort_all_movies_by_date_published_ascending()
         {
-            throw new NotImplementedException();
+            var list = new List<Movie>(movies);
+            list.Sort((movie1, movie2) => movie1.date_published.CompareTo(movie2.date_published));
+            return list;
         }
     }
+
+    public class MovieStudioYearComparitor : IComparer<Movie>
+    {
+        public int Compare(Movie x, Movie y)
+        {
+            if (x.production_studio.name.Equals(y.production_studio.name))
+            {
+                return x.date_published.Year.CompareTo(y.date_published.Year);
+            }
+            else
+            {
+                return x.production_studio.name.CompareTo(y.production_studio.name);
+
+            }
+
+
+        }
+    }
+
+
 }
